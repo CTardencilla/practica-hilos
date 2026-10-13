@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ni.edu.uam.practicahilos.ProcesadorController"
+      spacing="14"
+      prefWidth="670"
+      prefHeight="590"
+      style="-fx-background-color: #f8fafc;">
+
+    <padding>
+        <Insets top="14" right="18" bottom="14" left="18"/>
+    </padding>
+
+    <!-- Encabezado Principal -->
+    <VBox spacing="3" alignment="CENTER" 
+          style="-fx-background-color: #ffffff; -fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 16;">
+        <Label text="NicaData Solutions" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+        <Label text="Sistema de Procesamiento Concurrente de Datos" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+    </VBox>
+
+    <!-- Contenedor Principal de Pestañas -->
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        
+        <!-- PESTAÑA 1: PROCESO INDIVIDUAL -->
+        <Tab text="Proceso Individual">
+            <VBox spacing="14" alignment="CENTER">
+                <padding>
+                    <Insets top="14" right="16" bottom="14" left="16"/>
+                </padding>
+
+                <!-- Panel de Monitoreo Individual -->
+                <VBox spacing="12" alignment="CENTER" maxWidth="580" 
+                      style="-fx-border-color: #93c5fd; -fx-border-radius: 8; -fx-background-radius: 8; -fx-background-color: #ffffff; -fx-padding: 16;">
+                    
+                    <Label text="Procesamiento en Segundo Plano" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;"/>
+                    
+                    <HBox alignment="CENTER" spacing="12">
+                        <Label fx:id="lblEstado" text="Esperando inicio" 
+                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-background-color: #e2e8f0; -fx-padding: 3 10; -fx-background-radius: 12;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblPorcentaje" text="0%" 
+                               style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2563eb;"/>
+                    </HBox>
+                    
+                    <ProgressBar fx:id="barraProgreso" progress="0.0" prefWidth="540" prefHeight="22" 
+                                 style="-fx-accent: #2563eb;"/>
+
+                    <!-- Botones con Colores -->
+                    <HBox alignment="CENTER" spacing="12">
+                        <Button fx:id="btnIniciar" text="Iniciar" onAction="#iniciarProceso" prefWidth="95"
+                                style="-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        <Button fx:id="btnDetener" text="Detener" onAction="#detenerProceso" disable="true" prefWidth="95"
+                                style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        <Button fx:id="btnReiniciar" text="Reiniciar" onAction="#reiniciarProceso" prefWidth="95"
+                                style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Panel de Prueba de Bloqueo de Interfaz -->
+                <VBox spacing="9" alignment="CENTER" maxWidth="580"
+                      style="-fx-border-color: #fde047; -fx-border-radius: 8; -fx-background-radius: 8; -fx-background-color: #fefce8; -fx-padding: 12 16;">
+                    <Label text="Diagnóstico: Prueba de Bloqueo de Interfaz" 
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #a16207;"/>
+                    <Label text="Comprueba la congelación de la ventana al ejecutar tareas pesadas en el hilo gráfico principal." 
+                           wrapText="true" textAlignment="CENTER" style="-fx-font-size: 11px; -fx-text-fill: #854d0e;"/>
+                    <HBox alignment="CENTER" spacing="12">
+                        <Button text="Probar Proceso Bloqueante (5s)" onAction="#procesoBloqueante"
+                                style="-fx-background-color: #d97706; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        <Button text="Diagnóstico Técnico" onAction="#mostrarExplicacionBloqueo"
+                                style="-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </Tab>
+
+        <!-- PESTAÑA 2: MONITOR CONCURRENTE -->
+        <Tab text="Monitor Concurrente">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                <VBox spacing="12">
+                    <padding>
+                        <Insets top="12" right="14" bottom="12" left="14"/>
+                    </padding>
+
+                    <!-- Acciones Globales -->
+                    <HBox alignment="CENTER" spacing="10" 
+                          style="-fx-border-color: #cbd5e1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-background-color: #ffffff; -fx-padding: 8 14;">
+                        <Label text="Acciones Globales:" style="-fx-font-weight: bold; -fx-font-size: 12px; -fx-text-fill: #334155;"/>
+                        <Button text="Iniciar Ambos" onAction="#iniciarAmbos"
+                                style="-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        <Button text="Detener Ambos" onAction="#detenerAmbos"
+                                style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        <Button text="Reiniciar Ambos" onAction="#reiniciarAmbos"
+                                style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                    </HBox>
+
+                    <!-- FLUJO 1: CLIENTES (Acento Cian/Azul) -->
+                    <VBox spacing="10" 
+                          style="-fx-border-color: #7dd3fc; -fx-border-radius: 8; -fx-background-radius: 8; -fx-background-color: #ffffff; -fx-padding: 14;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Registros de Clientes" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0369a1;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="100 registros (~8s)" 
+                                   style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #0284c7; -fx-background-color: #e0f2fe; -fx-padding: 2 8; -fx-background-radius: 10;"/>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label fx:id="lblEstadoClientes" text="En espera" 
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #0c4a6e; -fx-background-color: #e0f2fe; -fx-padding: 3 8; -fx-background-radius: 4;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblPorcentajeClientes" text="0%" 
+                                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #0284c7;"/>
+                        </HBox>
+                        
+                        <ProgressBar fx:id="barraProgresoClientes" progress="0.0" prefWidth="600" prefHeight="22"
+                                     style="-fx-accent: #0284c7;"/>
+
+                        <HBox alignment="CENTER" spacing="12">
+                            <Button fx:id="btnIniciarClientes" text="Iniciar Clientes" onAction="#iniciarClientes" prefWidth="125"
+                                    style="-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                            <Button fx:id="btnDetenerClientes" text="Detener Clientes" onAction="#detenerClientes" disable="true" prefWidth="125"
+                                    style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                            <Button fx:id="btnReiniciarClientes" text="Reiniciar Clientes" onAction="#reiniciarClientes" prefWidth="125"
+                                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- FLUJO 2: PRODUCTOS (Acento Púrpura) -->
+                    <VBox spacing="10" 
+                          style="-fx-border-color: #d8b4fe; -fx-border-radius: 8; -fx-background-radius: 8; -fx-background-color: #ffffff; -fx-padding: 14;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Registros de Productos" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #7e22ce;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="50 registros (~7s)" 
+                                   style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #9333ea; -fx-background-color: #f3e8ff; -fx-padding: 2 8; -fx-background-radius: 10;"/>
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label fx:id="lblEstadoProductos" text="En espera" 
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #581c87; -fx-background-color: #f3e8ff; -fx-padding: 3 8; -fx-background-radius: 4;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lblPorcentajeProductos" text="0%" 
+                                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #9333ea;"/>
+                        </HBox>
+                        
+                        <ProgressBar fx:id="barraProgresoProductos" progress="0.0" prefWidth="600" prefHeight="22"
+                                     style="-fx-accent: #9333ea;"/>
+
+                        <HBox alignment="CENTER" spacing="12">
+                            <Button fx:id="btnIniciarProductos" text="Iniciar Productos" onAction="#iniciarProductos" prefWidth="125"
+                                    style="-fx-background-color: #16a34a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                            <Button fx:id="btnDetenerProductos" text="Detener Productos" onAction="#detenerProductos" disable="true" prefWidth="125"
+                                    style="-fx-background-color: #dc2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                            <Button fx:id="btnReiniciarProductos" text="Reiniciar Productos" onAction="#reiniciarProductos" prefWidth="125"
+                                    style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        </HBox>
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+    </TabPane>
+
+    <!-- Pie de página -->
+    <HBox alignment="CENTER">
+        <Label text="NicaData Solutions • Procesamiento Concurrente Multihilo" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;"/>
+    </HBox>
+
+</VBox>
